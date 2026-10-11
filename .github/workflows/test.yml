@@ -1,0 +1,35 @@
+name: Test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/checkout@v7
+        with:
+          repository: TurboWarp/scratch-vm
+          ref: c4823421cb7c17d8d8a89878851ce1668c26a21f
+          path: scratch-vm
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            scratch-vm/package-lock.json
+
+      - run: npm ci
+      - run: npm ci
+        working-directory: scratch-vm
+
+      - run: npm run typecheck
+
+      - run: node --import tsx --test test/*.test.ts
+        env:
+          UNWARP_VM: ${{ github.workspace }}/scratch-vm/src
