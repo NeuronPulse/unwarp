@@ -1,0 +1,204 @@
+// ---------------------------------------------------------------------------
+// Minimal i18n for the unwarp web tool.
+// Static UI text is translated via data-i18n / data-i18n-html /
+// data-i18n-placeholder / data-i18n-aria attributes; dynamic strings in
+// app.ts go through t().
+// ---------------------------------------------------------------------------
+
+export type Locale = 'zh' | 'en';
+
+const messages: Record<Locale, Record<string, string>> = {
+  zh: {
+    'app.title': 'unwarp · TurboWarp 编译器不是黑盒，它是一组等待逆向的模板',
+    'app.intro': 'unwarp 从 scratch-vm 的 <em>jsgen</em> 编译产物（JavaScript 工厂函数）反向还原 Scratch 中间表示（IR）。还原结果与原生 IR 等价。',
+    'app.introDesign': '可在下方粘贴单个脚本源码，或切换到「多脚本 / 过程」模式粘贴 entry + procedures。',
+    'app.license': '提醒：反编译他人分享的 Scratch 项目前，请确认已获得原项目作者的许可，否则可能违反其许可或分享条款。能够反编译某个项目，并不代表你在法律上被允许去反编译它、使用它、修改它、再分发它、出售它，或以其他方式无视版权法。请向项目的创建者询问更多信息。unwarp 自身以 <strong>GPL-3.0</strong> 许可发布：<a href="./LICENSE" target="_blank" rel="noopener">查看许可全文</a>。',
+
+    'input.title': '输入',
+    'input.mode.single': '单脚本',
+    'input.mode.multi': '多脚本 / 过程',
+    'input.mode.o2engine': '02Engine 打包混淆',
+    'input.mode.kylin': 'Kylin（尚未支持）',
+    'input.hint.single': '在此粘贴单个脚本的工厂函数源码。',
+    'input.hint.multi': '多脚本模式：在输入框中粘贴 JSON：<code>{"entry":"&lt;源码&gt;","procedures":{"Wfoo":"&lt;源码&gt;"}}</code>',
+    'input.hint.o2engine': '选择 02Engine / 02packager 生成的 HTML 文件，自动反编译并还原为 <code>.sb3</code>：<strong>预编译 HTML</strong> 会反编译所有脚本（支持三档混淆），<strong>未编译 HTML</strong> 则直接提取内嵌项目。',
+    'input.hint.kylin': 'Kylin 支持尚未实现，敬请期待。',
+    'input.source.placeholder': '在此粘贴 jsgen 工厂函数源码…',
+    'input.variant': '过程变体 variant（可选）',
+    'input.variant.placeholder': '如 Wfoo 或 Zproc %s',
+    'input.file': '选择文件',
+    'input.htmlFile': '选择 .html 文件',
+    'input.example': '载入示例',
+    'input.clear': '清空',
+    'input.run': '反编译',
+
+    'debug.title': '调试选项',
+    'debug.group.output': '显示 / 输出',
+    'debug.group.advanced': '高级',
+    'debug.yields': '显示 yields / warpTimer / 状态标志位',
+    'debug.hideMeta': '隐藏元数据字段（topBlockId / executableHat / arguments）',
+    'debug.compact': '紧凑 JSON（单行）',
+    'debug.strict': '严格模式：缺失的过程源码视为错误',
+    'debug.listids': '列表 ids（区分 LIST_*/VAR_* 监视器）',
+    'debug.acorn': 'AST 解析选项',
+    'debug.acorn.default': '默认',
+    'debug.acorn.locations': '含位置信息',
+    'debug.acorn.all': '含注释 + 位置',
+
+    'output.title': '输出',
+    'output.tab.src': '源码',
+    'output.copy': '复制',
+    'output.download': '下载',
+    'output.status.done': '反编译完成',
+    'output.status.error': '反编译失败，错误详情见下方输出',
+    'output.initial': '// 反编译结果将显示在此。粘贴 jsgen 源码后点击「反编译」。',
+
+    'unpack.run': '生成 .sb3',
+    'unpack.placeholder': '// 反编译得到的 .sb3 下载链接将显示在此。',
+    'unpack.downloadLink': '下载 {filename}（{size}）',
+    'unpack.processing': '正在反编译并打包 .sb3…',
+    'unpack.done': '反编译完成',
+    'unpack.donePlain': '检测到未编译（plain）的 02Engine HTML：内嵌项目已直接提取，无需反编译',
+    'unpack.warnings': '（{n} 条警告，见下方）',
+    'unpack.error': '反编译失败，错误详情见下方输出',
+
+    'footer.repo': 'GitHub 仓库',
+    'theme.label': '主题',
+    'theme.system': '跟随系统',
+    'theme.light': '浅色',
+    'theme.dark': '深色',
+
+    'aria.locale': '语言',
+
+    'toast.noSource': '请先输入或载入源码',
+    'toast.noHtmlFile': '请先选择 .html 文件',
+    'toast.copied': '已复制到剪贴板',
+    'toast.copyFailed': '复制失败（剪贴板不可用）',
+    'run.multiError': '多脚本模式需要 JSON：{ entry: "<源码>", procedures: { "<variant>": "<源码>" } }',
+    'run.missingProcedures': '缺失过程源码：',
+    'ast.failed': 'AST 解析失败',
+  },
+
+  en: {
+    'app.title': 'unwarp · The TurboWarp compiler is not a black box. It\'s a set of templates waiting to be reversed.',
+    'app.intro': 'unwarp reverse-engineers Scratch intermediate representations (IR) from scratch-vm <em>jsgen</em> output (JavaScript factory functions). The result is equivalent to the native IR.',
+    'app.introDesign': 'Paste a single script source below, or switch to "Multi-script / procedures" mode and paste entry + procedures.',
+    'app.license': 'Heads-up: before decompiling someone else\'s shared Scratch project, make sure you have the original author\'s permission, otherwise it may violate their license or sharing terms. Being able to decompile a project does not necessarily mean that you are legally allowed to decompile the project, use it, modify it, redistribute it, sell it, or otherwise ignore copyright law. Ask the creator of the project for more information. unwarp itself is released under <strong>GPL-3.0</strong>: <a href="./LICENSE" target="_blank" rel="noopener">view the full license</a>.',
+
+    'input.title': 'Input',
+    'input.mode.single': 'Single script',
+    'input.mode.multi': 'Multi-script / procedures',
+    'input.mode.o2engine': '02Engine packaged (obfuscated)',
+    'input.mode.kylin': 'Kylin (not supported yet)',
+    'input.hint.single': 'Paste a single script\'s factory-function source here.',
+    'input.hint.multi': 'Multi-script mode: paste JSON into the input: <code>{"entry":"&lt;source&gt;","procedures":{"Wfoo":"&lt;source&gt;"}}</code>',
+    'input.hint.o2engine': 'Select an HTML file generated by 02Engine / 02packager; it will be decompiled and restored as a <code>.sb3</code>: <strong>precompiled HTML</strong> gets every script decompiled (all three obfuscation levels supported), while <strong>uncompiled HTML</strong> is extracted directly.',
+    'input.hint.kylin': 'Kylin support is not implemented yet. Stay tuned.',
+    'input.source.placeholder': 'Paste jsgen factory-function source here…',
+    'input.variant': 'Procedure variant (optional)',
+    'input.variant.placeholder': 'e.g. Wfoo or Zproc %s',
+    'input.file': 'Choose a file',
+    'input.htmlFile': 'Choose .html file',
+    'input.example': 'Load example',
+    'input.clear': 'Clear',
+    'input.run': 'Decompile',
+
+    'debug.title': 'Debug options',
+    'debug.group.output': 'Display / output',
+    'debug.group.advanced': 'Advanced',
+    'debug.yields': 'Show yields / warpTimer / state flags',
+    'debug.hideMeta': 'Hide metadata fields (topBlockId / executableHat / arguments)',
+    'debug.compact': 'Compact JSON (single line)',
+    'debug.strict': 'Strict mode: missing procedure sources are errors',
+    'debug.listids': 'List ids (distinguishes LIST_*/VAR_* monitors)',
+    'debug.acorn': 'AST parse options',
+    'debug.acorn.default': 'Default',
+    'debug.acorn.locations': 'With locations',
+    'debug.acorn.all': 'With comments + locations',
+
+    'output.title': 'Output',
+    'output.tab.src': 'Source',
+    'output.copy': 'Copy',
+    'output.download': 'Download',
+    'output.status.done': 'Decompilation complete',
+    'output.status.error': 'Decompilation failed — see the output below',
+    'output.initial': '// Decompiled IR will appear here. Paste jsgen source and click "Decompile".',
+
+    'unpack.run': 'Build .sb3',
+    'unpack.placeholder': '// The .sb3 download link will appear here.',
+    'unpack.downloadLink': 'Download {filename} ({size})',
+    'unpack.processing': 'Decompiling and packaging .sb3…',
+    'unpack.done': 'Decompilation complete',
+    'unpack.donePlain': 'Detected a plain (uncompiled) 02Engine HTML: the embedded project was extracted directly; no decompilation was needed',
+    'unpack.warnings': ' ({n} warnings, see below)',
+    'unpack.error': 'Decompilation failed — see the output below',
+
+    'footer.repo': 'GitHub repository',
+    'theme.label': 'Theme',
+    'theme.system': 'System',
+    'theme.light': 'Light',
+    'theme.dark': 'Dark',
+
+    'aria.locale': 'Language',
+
+    'toast.noSource': 'Please enter or load source first',
+    'toast.noHtmlFile': 'Please select an .html file first',
+    'toast.copied': 'Copied to clipboard',
+    'toast.copyFailed': 'Copy failed (clipboard unavailable)',
+    'run.multiError': 'Multi-script mode needs JSON: { entry: "<source>", procedures: { "<variant>": "<source>" } }',
+    'run.missingProcedures': 'Missing procedure sources: ',
+    'ast.failed': 'AST parse failed',
+  },
+};
+
+const LOCALE_KEY = 'unwarp.locale';
+const SUPPORTED: Locale[] = ['zh', 'en'];
+
+let current: Locale = 'zh';
+
+export function t(key: string): string {
+  return messages[current][key] ?? messages.zh[key] ?? key;
+}
+
+export function getLocale(): Locale {
+  return current;
+}
+
+function applyTranslations(root: ParentNode = document): void {
+  root.querySelectorAll<HTMLElement>('[data-i18n]').forEach((el) => {
+    el.textContent = t(el.dataset.i18n!);
+  });
+  root.querySelectorAll<HTMLElement>('[data-i18n-html]').forEach((el) => {
+    el.innerHTML = t(el.dataset.i18nHtml!);
+  });
+  root.querySelectorAll<HTMLElement>('[data-i18n-placeholder]').forEach((el) => {
+    el.setAttribute('placeholder', t(el.dataset.i18nPlaceholder!));
+  });
+  root.querySelectorAll<HTMLElement>('[data-i18n-aria]').forEach((el) => {
+    el.setAttribute('aria-label', t(el.dataset.i18nAria!));
+  });
+}
+
+export function setLocale(locale: string): void {
+  current = (SUPPORTED as string[]).includes(locale) ? (locale as Locale) : 'zh';
+  document.documentElement.lang = current === 'zh' ? 'zh-CN' : 'en';
+  try {
+    localStorage.setItem(LOCALE_KEY, current);
+  } catch { /* ignore */ }
+  const sel = document.querySelector<HTMLSelectElement>('#locale-select');
+  if (sel) sel.value = current;
+  applyTranslations();
+}
+
+export function initI18n(): void {
+  let locale: string = 'zh';
+  try {
+    const stored = localStorage.getItem(LOCALE_KEY);
+    if ((SUPPORTED as string[]).includes(stored || '')) {
+      locale = stored as string;
+    } else if ((navigator.language || '').toLowerCase().startsWith('en')) {
+      locale = 'en';
+    }
+  } catch { /* ignore */ }
+  setLocale(locale);
+}

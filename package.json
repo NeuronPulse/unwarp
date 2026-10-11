@@ -1,0 +1,27 @@
+{
+  "name": "unwarp",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Decompiler: scratch-vm compiled JS -> Scratch IR (equivalence-preserving)",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "tsx test/decompiler.test.ts",
+    "typecheck": "tsc --noEmit",
+    "web:build": "esbuild web/app.ts --bundle --format=esm --platform=browser --target=es2020 --outfile=web/bundle.js",
+    "web:serve": "node web/serve.js 8080"
+  },
+  "dependencies": {
+    "@turbowarp/jszip": "^3.12.0",
+    "acorn": "^8.18.0",
+    "deobfuscator": "^2.4.6"
+  },
+  "devDependencies": {
+    "@turbowarp/nanolog": "^1.0.1",
+    "@types/estree": "^1.0.9",
+    "@types/node": "^26.2.0",
+    "javascript-obfuscator": "^4.2.2",
+    "tsx": "^4.23.12",
+    "typescript": "^5.9.3"
+  }
+}

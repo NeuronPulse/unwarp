@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="app.title">unwarp · TurboWarp 编译器不是黑盒，它是一组等待逆向的模板</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main>
+    <!-- Intro / branding / licensing disclaimer (mirrors P4 intro Section) -->
+    <section class="card" style="border-top: 6px solid var(--accent)">
+      <h1>unwarp</h1>
+      <p data-i18n-html="app.intro">unwarp 从 scratch-vm 的 <em>jsgen</em> 编译产物（JavaScript 工厂函数）反向还原 Scratch 中间表示（IR）。还原结果与原生 IR 等价。</p>
+      <p data-i18n-html="app.introDesign">可在下方粘贴单个脚本源码，或切换到「多脚本 / 过程」模式粘贴 entry + procedures。</p>
+      <p class="disclaimer-license" data-i18n-html="app.license">
+        提醒：反编译他人分享的 Scratch 项目前，请确认已获得原项目作者的许可，否则可能违反其许可或分享条款。能够反编译某个项目，并不代表你在法律上被允许去反编译它、使用它、修改它、再分发它、出售它，或以其他方式无视版权法。请向项目的创建者询问更多信息。unwarp 自身以 <strong>GPL-3.0</strong> 许可发布：<a href="./LICENSE" target="_blank" rel="noopener">查看许可全文</a>。
+      </p>
+    </section>
+
+    <!-- Input (mirrors SelectProject Section, accent #4C97FF) -->
+    <section class="card" style="border-top: 6px solid #4C97FF">
+      <h2 data-i18n="input.title">输入</h2>
+
+      <div class="options" id="import-mode">
+        <label class="option"><input type="radio" name="input-mode" value="js-single" checked>
+          <span data-i18n="input.mode.single">单脚本</span></label>
+        <label class="option"><input type="radio" name="input-mode" value="js-multi">
+          <span data-i18n="input.mode.multi">多脚本 / 过程</span></label>
+        <label class="option"><input type="radio" name="input-mode" value="o2engine">
+          <span data-i18n="input.mode.o2engine">02Engine 打包混淆</span></label>
+        <label class="option"><input type="radio" name="input-mode" value="kylin" disabled>
+          <span data-i18n="input.mode.kylin">Kylin（尚未支持）</span></label>
+      </div>
+
+      <p class="hint" id="import-hint" data-i18n-html="input.hint.single"></p>
+
+      <div id="js-input">
+        <textarea id="source" spellcheck="false" data-i18n-placeholder="input.source.placeholder" placeholder="在此粘贴 jsgen 工厂函数源码…"></textarea>
+
+        <div class="option" id="single-opts" hidden>
+          <label class="option-inline"><span data-i18n="input.variant">过程变体 variant（可选）</span>
+            <input type="text" id="variant" data-i18n-placeholder="input.variant.placeholder" placeholder="如 Wfoo 或 Zproc %s">
+          </label>
+        </div>
+      </div>
+
+      <div class="buttons">
+        <div class="button" id="js-actions">
+          <label class="btn btn--secondary file-btn"><span data-i18n="input.file">选择文件</span>
+            <input type="file" id="file" accept=".js,.ts,.txt,.json">
+          </label>
+        </div>
+        <div class="button" id="js-actions-example"><button class="btn btn--secondary" id="example-btn" type="button" data-i18n="input.example">载入示例</button></div>
+        <div class="button" id="js-actions-clear"><button class="btn btn--secondary" id="clear-btn" type="button" data-i18n="input.clear">清空</button></div>
+        <div class="button" id="html-actions" hidden>
+          <label class="btn btn--secondary file-btn"><span data-i18n="input.htmlFile">选择 .html 文件</span>
+            <input type="file" id="html-file" accept=".html,.htm">
+          </label>
+        </div>
+        <div class="side-buttons"><button class="btn btn--primary" id="run-btn" type="button" data-i18n="input.run">反编译</button></div>
+      </div>
+    </section>
+
+    <!-- Debug options (accent #FFAB19), grouped into collapsible sets; only for the JS modes -->
+    <section class="card" id="debug-section" style="border-top: 6px solid #FFAB19">
+      <h2 data-i18n="debug.title">调试选项</h2>
+      <details open>
+        <summary data-i18n="debug.group.output">显示 / 输出</summary>
+        <label class="option"><input type="checkbox" id="opt-yields" checked> <span data-i18n="debug.yields">显示 yields / warpTimer / 状态标志位</span></label>
+        <label class="option"><input type="checkbox" id="opt-hidemeta"> <span data-i18n="debug.hideMeta">隐藏元数据字段（topBlockId / executableHat / arguments）</span></label>
+        <label class="option"><input type="checkbox" id="opt-compact"> <span data-i18n="debug.compact">紧凑 JSON（单行）</span></label>
+      </details>
+      <details>
+        <summary data-i18n="debug.group.advanced">高级</summary>
+        <label class="option"><input type="checkbox" id="opt-strict"> <span data-i18n="debug.strict">严格模式：缺失的过程源码视为错误</span></label>
+        <label class="option"><span data-i18n="debug.listids">列表 ids（区分 LIST_*/VAR_* 监视器）</span>
+          <input type="text" id="listids" class="shorter" placeholder="L1,L2">
+        </label>
+        <label class="option"><span data-i18n="debug.acorn">AST 解析选项</span>
+          <select id="acorn-opts">
+            <option value="default" data-i18n="debug.acorn.default">默认</option>
+            <option value="locations" data-i18n="debug.acorn.locations">含位置信息</option>
+            <option value="all" data-i18n="debug.acorn.all">含注释 + 位置</option>
+          </select>
+        </label>
+      </details>
+    </section>
+
+    <!-- Output (accent #9966FF): IR/AST tabs for the JS modes, .sb3 download for the project modes -->
+    <section class="card" style="border-top: 6px solid #9966FF">
+      <h2 data-i18n="output.title">输出</h2>
+
+      <div id="output-js-view">
+        <p class="hint" id="js-status" aria-live="polite"></p>
+        <div class="tabs" role="tablist" id="output-tabs">
+          <button class="tab active" data-tab="ir" type="button">IR</button>
+          <button class="tab" data-tab="ast" type="button">AST</button>
+          <button class="tab" data-tab="src" type="button" data-i18n="output.tab.src">源码</button>
+        </div>
+        <pre id="output" class="output" aria-live="polite"></pre>
+        <div class="buttons">
+          <div class="button"><button class="btn btn--secondary" id="copy-btn" type="button" data-i18n="output.copy">复制</button></div>
+          <div class="button"><button class="btn btn--secondary" id="download-btn" type="button" data-i18n="output.download">下载</button></div>
+        </div>
+      </div>
+
+      <div id="output-project-view" hidden>
+        <p class="hint" id="unpack-status" aria-live="polite"></p>
+        <pre id="unpack-output" class="output" hidden aria-live="polite"></pre>
+        <p class="center-link" id="unpack-download-area" hidden>
+          <a id="unpack-download-link" download></a>
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      <div><a href="https://github.com/NeuronPulse/unwarp" target="_blank" rel="noopener" data-i18n="footer.repo">GitHub 仓库</a></div>
+      <div>
+        <select id="theme-select" data-i18n-aria="theme.label" aria-label="主题">
+          <option value="system" data-i18n="theme.system">跟随系统</option>
+          <option value="light" data-i18n="theme.light">浅色</option>
+          <option value="dark" data-i18n="theme.dark">深色</option>
+        </select>
+      </div>
+      <div>
+        <select id="locale-select" data-i18n-aria="aria.locale" aria-label="语言">
+          <option value="zh">中文</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+    </footer>
+  </main>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <script type="module" src="./bundle.js"></script>
+</body>
+</html>

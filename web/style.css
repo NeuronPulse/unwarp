@@ -1,0 +1,398 @@
+/* ===========================================================================
+   unwarp web tool styles.
+   Design tokens: Helvetica Neue font stack; light: white/black, dark (#111/#eee);
+   centered cards (max-width 625px) with a 6px colored top border and soft shadow;
+   bold rounded buttons; centered footer with links separated by " - ".
+   =========================================================================== */
+
+:root {
+  --accent: #ff4c4c;          /* primary accent color           */
+  --accent-secondary: #0FBD8C;/* secondary button               */
+  --accent-danger: #FF8C1A;   /* dangerous button               */
+  --link: blue;
+  --link-dark: #56b2ff;
+
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: white;
+  color: black;
+}
+
+/* The theme is stored as an attribute on <html>; default (no attr / light) is
+   the :root above, only [theme="dark"] overrides. */
+[theme="dark"] {
+  background: #111;
+  color: #eee;
+  color-scheme: dark;
+}
+
+a {
+  color: var(--link);
+}
+[theme="dark"] a {
+  color: var(--link-dark);
+}
+a:active {
+  color: red;
+}
+
+/* --- inputs ------------------------------------------------------------ */
+input[type="text"],
+input[type="number"],
+textarea,
+select {
+  padding: 2px;
+  background-color: white;
+  color: black;
+  border: 1px solid rgb(160, 160, 160);
+  border-radius: 2px;
+  font-family: inherit;
+}
+input[type="text"]:hover,
+input[type="number"]:hover,
+select:hover {
+  border-color: rgb(30, 30, 30);
+}
+[theme="dark"] input[type="text"],
+[theme="dark"] input[type="number"],
+[theme="dark"] textarea,
+[theme="dark"] select {
+  background-color: #333;
+  color: white;
+  border-color: #888;
+}
+[theme="dark"] input[type="text"]:hover,
+[theme="dark"] input[type="number"]:hover,
+[theme="dark"] select:hover {
+  border-color: #bbb;
+}
+
+p, h1, h2, h3 {
+  margin: 12px 0;
+}
+summary {
+  cursor: pointer;
+}
+input {
+  font-size: 0.8em;
+}
+
+main {
+  padding-bottom: 10px;
+}
+
+/* --- card (Section) ---------------------------------------------------- */
+.card {
+  max-width: 625px;
+  margin: auto;
+  border-radius: 0.3em;
+  background-color: #fff;
+  padding: 1em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  box-shadow: 0 2px 0.5em 0.1em rgba(0, 0, 0, 0.2);
+}
+[theme="dark"] .card {
+  background: #222;
+}
+.card.modal {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 8px;
+}
+.card.center {
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.caption {
+  font-style: italic;
+}
+.disclaimer {
+  font-style: italic;
+}
+.disclaimer-license {
+  font-style: italic;
+  color: #c00000;
+}
+[theme="dark"] .disclaimer-license {
+  color: #ff7a7a;
+}
+.disclaimer-license a {
+  color: inherit;
+  text-decoration: underline;
+}
+.version {
+  font-size: small;
+  opacity: 0.8;
+}
+.version a {
+  color: inherit;
+}
+
+/* --- option rows ------------------------------------------------------ */
+.option {
+  display: block;
+  margin: 4px 0;
+}
+.option-inline {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 4px 0;
+}
+/* Radio groups in the packager (SelectProject.svelte) are stacked rows with a
+   comfortable click target; mirror that here. */
+.options {
+  margin: 12px 0;
+}
+.options .option {
+  min-height: 25px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.options .option input:disabled + span {
+  opacity: 0.6;
+}
+.group {
+  margin: 12px 0;
+}
+.group:last-child,
+.option:last-child,
+p:last-child {
+  margin-bottom: 0;
+}
+.shorter {
+  width: 150px;
+}
+input[type="number"].narrow {
+  width: 50px;
+}
+
+/* --- buttons (Button.svelte) ------------------------------------------ */
+.btn {
+  position: relative;
+  font-family: inherit;
+  font-size: 14px;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  font-weight: bold;
+  line-height: 1.2;
+}
+.btn--primary {
+  background-color: var(--accent);
+}
+.btn--secondary {
+  background-color: var(--accent-secondary);
+}
+.btn--danger {
+  background-color: var(--accent-danger);
+}
+.btn:active {
+  filter: brightness(0.8);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+/* Download links rendered as buttons (blob URLs) */
+a.btn {
+  display: inline-block;
+  text-decoration: none;
+}
+/* file input styled as a button — flex-centered so its height matches the
+   adjacent <button.btn> exactly (packager Button.svelte centers its label the
+   same way) */
+.file-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.file-btn input[type="file"] {
+  display: none;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 12px;
+}
+.button {
+  margin-right: 4px;
+}
+.side-buttons {
+  display: flex;
+  margin-left: auto;
+}
+
+/* --- import entries (reserved) ---------------------------------------- */
+.import-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 8px 0;
+}
+.hint {
+  font-size: 0.85em;
+  opacity: 0.8;
+  margin: 8px 0;
+}
+.hint.error {
+  color: #c00000;
+  font-weight: bold;
+  opacity: 1;
+}
+[theme="dark"] .hint.error {
+  color: #ff7a7a;
+}
+/* Packager-style centered download link (Downloads.svelte) */
+.center-link {
+  text-align: center;
+  margin: 12px 0;
+}
+.warning {
+  font-weight: bold;
+  background: yellow;
+  color: black;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 8px 0;
+}
+
+/* --- tabs -------------------------------------------------------------- */
+.tabs {
+  display: flex;
+  gap: 2px;
+  margin: 8px 0;
+  flex-wrap: wrap;
+}
+.tab {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  padding: 4px 8px;
+  border-bottom: 2px solid transparent;
+}
+.tab:hover {
+  border-bottom-color: rgba(128, 128, 128, 0.5);
+}
+.tab.active {
+  border-bottom-color: var(--accent);
+  font-weight: bold;
+}
+
+/* --- output ------------------------------------------------------------ */
+.output {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.8em;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgb(160, 160, 160);
+  border-radius: 2px;
+  padding: 8px;
+  margin: 8px 0;
+  max-height: 60vh;
+  overflow: auto;
+}
+[theme="dark"] .output {
+  background: #1a1a1a;
+  border-color: #555;
+}
+.output.error {
+  border-color: var(--accent);
+}
+/* --- syntax highlighting tokens ---------------------------------------- */
+.tok-key     { color: #058a80; }
+.tok-string  { color: #a31515; }
+.tok-number  { color: #0000ff; }
+.tok-bool    { color: #795e26; }
+.tok-keyword { color: #0000ff; }
+.tok-comment { color: #008000; font-style: italic; }
+[theme="dark"] .tok-key     { color: #9cdcfe; }
+[theme="dark"] .tok-string  { color: #ce9178; }
+[theme="dark"] .tok-number  { color: #b5cea8; }
+[theme="dark"] .tok-bool    { color: #569cd6; }
+[theme="dark"] .tok-keyword { color: #569cd6; }
+[theme="dark"] .tok-comment { color: #6a9955; }
+#source {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 100%;
+  height: 160px;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.8em;
+  resize: vertical;
+}
+
+/* --- footer ------------------------------------------------------------ */
+footer {
+  text-align: center;
+}
+footer > div {
+  margin-top: 12px;
+}
+
+/* --- modal (license / errors) ----------------------------------------- */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.75);
+  word-break: break-word;
+}
+.modal[hidden] {
+  display: none;
+}
+.modal-close {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1.1em;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* --- toast ------------------------------------------------------------- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  background: #222;
+  color: #eee;
+  padding: 10px 16px;
+  border-radius: 4px;
+  box-shadow: 0 2px 0.5em 0.1em rgba(0, 0, 0, 0.4);
+  z-index: 30;
+  font-size: 0.9em;
+}
+[theme="dark"] .toast {
+  background: #eee;
+  color: #222;
+}
+.toast[hidden] {
+  display: none;
+}

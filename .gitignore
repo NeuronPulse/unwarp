@@ -1,0 +1,19 @@
+# Third-party reference clones (not part of this project, cloned for reference only)
+scratch-vm/
+02scratch-vm/
+packager/
+02packager/
+unpackager/
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+web/bundle.js
+
+# Local dev artifacts
+out/
+main.yaml
+.codebuddy/
+.playwright-cli/
